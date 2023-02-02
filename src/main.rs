@@ -31,6 +31,7 @@ impl EventHandler for Handler {
 
             let content = match command.data.name.as_str() {
                 "ping" => commands::ping::run(&command.data.options),
+                "users" => commands::list_users::run(&ctx, &command.data.options).await,
                 _ => "not implemented :(".to_string(),
             };
 
@@ -58,7 +59,9 @@ impl EventHandler for Handler {
         );
 
         let commands = GuildId::set_application_commands(&guild_id, &ctx.http, |commands| {
-            commands.create_application_command(|command| commands::ping::register(command))
+            commands
+                .create_application_command(|command| commands::ping::register(command))
+                .create_application_command(|command| commands::list_users::register(command))
         })
         .await;
 
