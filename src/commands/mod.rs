@@ -14,7 +14,7 @@ pub struct Handler;
 impl EventHandler for Handler {
     async fn interaction_create(&self, ctx: Context, interaction: Interaction) {
         if let Interaction::ApplicationCommand(command) = interaction {
-            println!("Received command interaction: {:#?}", command);
+            println!("Received command interaction: {command:#?}");
 
             let content = match command.data.name.as_str() {
                 "ping" => ping::run(&command.data.options),
@@ -30,7 +30,7 @@ impl EventHandler for Handler {
                 })
                 .await
             {
-                println!("Cannot respond to slash command: {}", why);
+                println!("Cannot respond to slash command: {why}");
             }
         }
     }
@@ -52,9 +52,6 @@ impl EventHandler for Handler {
         })
         .await;
 
-        println!(
-            "I now have the following guild slash commands: {:#?}",
-            commands
-        );
+        println!("I now have the following guild slash commands: {commands:#?}");
     }
 }
