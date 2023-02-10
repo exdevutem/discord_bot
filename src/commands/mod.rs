@@ -3,7 +3,6 @@ use serenity::model::application::interaction::{Interaction, InteractionResponse
 use serenity::model::gateway::Ready;
 use serenity::model::id::GuildId;
 use serenity::prelude::*;
-use std::env;
 
 pub mod list_users;
 pub mod ping;
@@ -32,24 +31,17 @@ impl EventHandler for Handler {
             }
         }
     }
-
     async fn ready(&self, ctx: Context, ready: Ready) {
         println!("{} is connected!", ready.user.name);
-
-        let guild_id = GuildId(
-            env::var("GUILD_ID")
-                .expect("Expected GUILD_ID in environment")
-                .parse()
-                .expect("GUILD_ID must be an integer"),
-        );
-
-        let commands = GuildId::set_application_commands(&guild_id, &ctx.http, |commands| {
+        
+        for guild in ready.guilds.iter() {
+        let commands = GuildId::set_application_commands(&guild.id, &ctx.http, |commands| {
             commands
                 .create_application_command(|command| ping::register(command))
                 .create_application_command(|command| list_users::register(command))
         })
         .await;
-
         println!("I now have the following guild slash commands: {commands:#?}");
+        }
     }
 }
