@@ -14,11 +14,9 @@ pub struct Handler;
 impl EventHandler for Handler {
     async fn interaction_create(&self, ctx: Context, interaction: Interaction) {
         if let Interaction::ApplicationCommand(command) = interaction {
-            println!("Received command interaction: {command:#?}");
-
             let content = match command.data.name.as_str() {
                 "ping" => ping::run(&command.data.options),
-                "users" => list_users::run(&ctx, &command.data.options).await,
+                "users" => list_users::run(command.guild_id, &ctx, &command.data.options).await,
                 _ => "not implemented :(".to_string(),
             };
 
