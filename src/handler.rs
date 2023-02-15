@@ -60,10 +60,10 @@ impl EventHandler for Handler {
     }
 
     async fn guild_create(&self, _ctx: Context, _guild: Guild, _is_new: bool) {
-        println!("Joined a server!");
-
         if _is_new {
-            println!("It is a new server too!");
+            // TODO: El bot debería presentarse!
+            println!("Joined new server [{}], setting app commands.", _guild.name);
+            Handler::set_app_commands(&_guild.id, &_ctx).await;
         }
     }
 }
