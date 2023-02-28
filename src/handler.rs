@@ -2,6 +2,7 @@ use serenity::async_trait;
 use serenity::model::application::interaction::{Interaction, InteractionResponseType};
 use serenity::model::gateway::Ready;
 use serenity::model::id::GuildId;
+use serenity::model::prelude::Guild;
 use serenity::prelude::*;
 
 use crate::commands;
@@ -55,6 +56,14 @@ impl EventHandler for Handler {
             {
                 println!("Cannot respond to slash command: {why}");
             }
+        }
+    }
+
+    async fn guild_create(&self, _ctx: Context, _guild: Guild, _is_new: bool) {
+        if _is_new {
+            // TODO: El bot debería presentarse!
+            println!("Joined new server [{}], setting app commands.", _guild.name);
+            Handler::set_app_commands(&_guild.id, &_ctx).await;
         }
     }
 }

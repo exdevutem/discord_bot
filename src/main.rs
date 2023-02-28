@@ -12,8 +12,10 @@ async fn main() {
 
     let token = env::var("DISCORD_TOKEN").expect("Missing Discord Token");
 
-    let mut client = Client::builder(token, GatewayIntents::empty())
-        .event_handler(handler::Handler) // Revisar commands/mod.rs
+    let intents = GatewayIntents::GUILDS | GatewayIntents::GUILD_PRESENCES;
+
+    let mut client = Client::builder(token, intents)
+        .event_handler(handler::Handler) // Revisar handler.rs
         .await
         .expect("Error creating Client");
 
